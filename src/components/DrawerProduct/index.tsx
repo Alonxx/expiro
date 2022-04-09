@@ -46,9 +46,7 @@ export const DrawerProduct: React.FC<Props> = ({
       <Actionsheet.Content>
         <VStack mb={"10%"} space={10}>
           <Box>
-            <Heading>
-              <Text textAlign={"center"}>{product.productName}</Text>
-            </Heading>
+            <Heading textAlign={"center"}>{product.productName}</Heading>
             <Box>
               {product.note.length > 0 && (
                 <Text fontSize={"lg"} textAlign={"center"}>

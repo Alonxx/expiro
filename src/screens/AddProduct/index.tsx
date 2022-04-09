@@ -12,14 +12,14 @@ import {
   Avatar,
 } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerAndroid from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TProduct } from "models/Types";
 import { BarCordeScanner } from "../../components";
 import { useToast } from "native-base";
 import "react-native-get-random-values";
-
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { v4 as uuidv4 } from "uuid";
 
 export const AddProduct: React.FC = () => {
@@ -54,6 +54,8 @@ export const AddProduct: React.FC = () => {
   const [showScanner, setShowScanner] = React.useState<boolean>(false);
 
   const [error, setError] = React.useState<boolean>(false);
+
+  const [show, setShow] = React.useState(false);
 
   const onHandlePress = () => {
     if (inputsValue.productName.length === 0) return setError(true);
@@ -95,6 +97,17 @@ export const AddProduct: React.FC = () => {
       ...prevState,
       expirationDate: currentDate,
     }));
+    setShow(false);
+  };
+
+  const showMode = () => {
+    let test: any = DateTimePickerAndroid;
+    test.open({
+      value: inputsValue.expirationDate,
+      onChangeDatePicker,
+      mode: "date",
+      is24Hour: true,
+    });
   };
 
   const onPressScanner = () => {
@@ -172,10 +185,38 @@ export const AddProduct: React.FC = () => {
               borderRadius={"10px"}
               space={2}
             >
-              <Box pl={2}>
-                <Ionicons name="calendar-outline" size={20} color="black" />
-              </Box>
-              <RNDateTimePicker
+              <Button
+                height={9}
+                w={"100%"}
+                bg={"gray.200"}
+                variant={"ghost"}
+                colorScheme={"light"}
+                onPress={showMode}
+              >
+                <HStack w={"100%"}>
+                  <Box w={"25%"}>
+                    <Ionicons name="calendar-outline" size={20} color="black" />
+                  </Box>
+                  <Box w={"75%"}>
+                    <Text>
+                      {inputsValue.expirationDate.toISOString().split("T")[0]}
+                    </Text>
+                  </Box>
+                </HStack>
+              </Button>
+
+              {/*     <Button onPress={() => setShow(true)}>date2</Button>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={inputsValue.expirationDate}
+                  mode={"date"}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChangeDatePicker}
+                />
+              )} */}
+              {/*     <RNDateTimePickers
                 testID="dateTimePicker"
                 value={inputsValue.expirationDate}
                 mode={"date"}
@@ -185,7 +226,7 @@ export const AddProduct: React.FC = () => {
                 }}
                 is24Hour={true}
                 onChange={onChangeDatePicker}
-              />
+              /> */}
             </HStack>
           </VStack>
           <HStack space={4} w="50%">

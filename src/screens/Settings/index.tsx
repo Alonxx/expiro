@@ -55,3 +55,22 @@ export const Settings: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+/* {
+  "cli": {
+    "version": ">= 0.49.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+} */

@@ -30,7 +30,8 @@
     "react-navigation": "^4.4.4",
     "realm": "^10.14.0",
     "uuid": "^8.3.2",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "expo-updates": "~0.11.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

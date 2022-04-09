@@ -10,12 +10,27 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-aria/ssr": "^3.1.2",
+    "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-native-community/datetimepicker": "4.0.0",
+    "@react-navigation/bottom-tabs": "^6.3.1",
+    "@react-navigation/native": "^6.0.10",
+    "@react-navigation/stack": "^6.2.1",
+    "@realm/react": "^0.2.1",
     "expo": "~44.0.0",
+    "expo-barcode-scanner": "~11.2.0",
+    "expo-haptics": "~11.1.0",
     "expo-status-bar": "~1.2.0",
+    "native-base": "^3.3.10",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
-    "react-native-web": "0.17.1"
+    "react-native-get-random-values": "^1.7.2",
+    "react-native-web": "0.17.1",
+    "react-navigation": "^4.4.4",
+    "realm": "^10.14.0",
+    "uuid": "^8.3.2",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

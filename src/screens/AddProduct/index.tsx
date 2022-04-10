@@ -12,7 +12,6 @@ import {
   Avatar,
 } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DateTimePickerAndroid from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TProduct } from "models/Types";
@@ -20,6 +19,7 @@ import { BarCordeScanner } from "../../components";
 import { useToast } from "native-base";
 import "react-native-get-random-values";
 import DateTimePicker from "@react-native-community/datetimepicker";
+
 import { v4 as uuidv4 } from "uuid";
 
 export const AddProduct: React.FC = () => {
@@ -55,6 +55,7 @@ export const AddProduct: React.FC = () => {
 
   const [error, setError] = React.useState<boolean>(false);
 
+  const [date, setDate] = React.useState(new Date());
   const [show, setShow] = React.useState(false);
 
   const onHandlePress = () => {
@@ -92,22 +93,12 @@ export const AddProduct: React.FC = () => {
   };
 
   const onChangeDatePicker = (even: any, selectedDate: any) => {
+    setShow(false);
     const currentDate = selectedDate;
     setInputsValue((prevState) => ({
       ...prevState,
       expirationDate: currentDate,
     }));
-    setShow(false);
-  };
-
-  const showMode = () => {
-    let test: any = DateTimePickerAndroid;
-    test.open({
-      value: inputsValue.expirationDate,
-      onChangeDatePicker,
-      mode: "date",
-      is24Hour: true,
-    });
   };
 
   const onPressScanner = () => {
@@ -191,7 +182,10 @@ export const AddProduct: React.FC = () => {
                 bg={"gray.200"}
                 variant={"ghost"}
                 colorScheme={"light"}
-                onPress={showMode}
+                onPress={(event) => {
+                  event.preventDefault();
+                  setShow(true);
+                }}
               >
                 <HStack w={"100%"}>
                   <Box w={"25%"}>
@@ -204,8 +198,6 @@ export const AddProduct: React.FC = () => {
                   </Box>
                 </HStack>
               </Button>
-
-              {/*     <Button onPress={() => setShow(true)}>date2</Button>
               {show && (
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -215,18 +207,7 @@ export const AddProduct: React.FC = () => {
                   display="default"
                   onChange={onChangeDatePicker}
                 />
-              )} */}
-              {/*     <RNDateTimePickers
-                testID="dateTimePicker"
-                value={inputsValue.expirationDate}
-                mode={"date"}
-                style={{
-                  width: "100%",
-                  marginLeft: -20,
-                }}
-                is24Hour={true}
-                onChange={onChangeDatePicker}
-              /> */}
+              )}
             </HStack>
           </VStack>
           <HStack space={4} w="50%">
@@ -340,4 +321,24 @@ export const AddProduct: React.FC = () => {
       </VStack>
     </SafeAreaView>
   );
+  /* 
+    return (
+    <SafeAreaView>
+      <View>
+        <Button title="Open" onPress={() => setOpen(true)} />
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          onConfirm={(date) => {
+            setOpen(false);
+            setDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+      </View>
+    </SafeAreaView>
+  ); */
 };

@@ -10,10 +10,10 @@ import {
   Button,
 } from "native-base";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useGetDaysToExpire, useGetProducts } from "../../hooks";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGetProducts } from "../../hooks";
+import { Alert } from "react-native";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -28,17 +28,39 @@ export const DrawerProduct: React.FC<Props> = ({
   product,
   setIsUpdateProducts,
 }) => {
+  const [loading, setLoading] = React.useState<boolean>(false);
   const expiritionDate = product.expirationDate.toString().split("T")[0];
   const getProducts = useGetProducts();
 
   const handleDelete = async () => {
-    let producsData = await getProducts();
-    let producsFilter = producsData.filter(
-      (productData) => productData.id !== product.id
+    Alert.alert(
+      "Delete this product",
+      "Are you sure you want to delete this product?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            setLoading(true);
+            let producsData = await getProducts();
+            let producsFilter = producsData.filter(
+              (productData) => productData.id !== product.id
+            );
+            await AsyncStorage.setItem(
+              "products",
+              JSON.stringify(producsFilter)
+            );
+            setIsUpdateProducts(true);
+            setLoading(false);
+            onClose();
+          },
+        },
+      ]
     );
-    await AsyncStorage.setItem("products", JSON.stringify(producsFilter));
-    setIsUpdateProducts(true);
-    onClose();
   };
 
   return (
@@ -46,7 +68,9 @@ export const DrawerProduct: React.FC<Props> = ({
       <Actionsheet.Content>
         <VStack mb={"10%"} space={10}>
           <Box>
-            <Heading textAlign={"center"}>{product.productName}</Heading>
+            <Text fontWeight={"600"} fontSize={"3xl"} textAlign={"center"}>
+              {product.productName}
+            </Text>
             <Box>
               {product.note.length > 0 && (
                 <Text fontSize={"lg"} textAlign={"center"}>
@@ -63,7 +87,12 @@ export const DrawerProduct: React.FC<Props> = ({
               <Text fontSize={"lg"}>Bar Code: {product.barCode}</Text>
             )}
           </VStack>
-          <Button onPress={handleDelete} colorScheme={"red"}>
+          <Button
+            isLoading={loading}
+            onPress={handleDelete}
+            bgColor="black"
+            colorScheme={"light"}
+          >
             Delete
           </Button>
         </VStack>

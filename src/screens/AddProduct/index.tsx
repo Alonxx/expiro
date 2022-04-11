@@ -19,6 +19,7 @@ import { BarCordeScanner } from "../../components";
 import { useToast } from "native-base";
 import "react-native-get-random-values";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Platform } from "react-native";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -55,8 +56,7 @@ export const AddProduct: React.FC = () => {
 
   const [error, setError] = React.useState<boolean>(false);
 
-  const [date, setDate] = React.useState(new Date());
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = React.useState(Platform.OS === "ios");
 
   const onHandlePress = () => {
     if (inputsValue.productName.length === 0) return setError(true);
@@ -73,7 +73,7 @@ export const AddProduct: React.FC = () => {
           pr: 2,
           title: "Product added successfully",
           placement: "top",
-          bgColor: "green.500",
+          bgColor: "black",
           borderRadius: 13,
         });
         setLoading(false);
@@ -93,7 +93,7 @@ export const AddProduct: React.FC = () => {
   };
 
   const onChangeDatePicker = (even: any, selectedDate: any) => {
-    setShow(false);
+    setShow(Platform.OS === "ios");
     const currentDate = selectedDate;
     setInputsValue((prevState) => ({
       ...prevState,
@@ -176,28 +176,34 @@ export const AddProduct: React.FC = () => {
               borderRadius={"10px"}
               space={2}
             >
-              <Button
-                height={9}
-                w={"100%"}
-                bg={"gray.200"}
-                variant={"ghost"}
-                colorScheme={"light"}
-                onPress={(event) => {
-                  event.preventDefault();
-                  setShow(true);
-                }}
-              >
-                <HStack w={"100%"}>
-                  <Box w={"25%"}>
-                    <Ionicons name="calendar-outline" size={20} color="black" />
-                  </Box>
-                  <Box w={"75%"}>
-                    <Text>
-                      {inputsValue.expirationDate.toISOString().split("T")[0]}
-                    </Text>
-                  </Box>
-                </HStack>
-              </Button>
+              {Platform.OS !== "ios" && (
+                <Button
+                  height={9}
+                  w={"100%"}
+                  bg={"gray.200"}
+                  variant={"ghost"}
+                  colorScheme={"light"}
+                  onPress={(event) => {
+                    event.preventDefault();
+                    setShow(true);
+                  }}
+                >
+                  <HStack w={"100%"}>
+                    <Box w={"25%"}>
+                      <Ionicons
+                        name="calendar-outline"
+                        size={20}
+                        color="black"
+                      />
+                    </Box>
+                    <Box w={"75%"}>
+                      <Text>
+                        {inputsValue.expirationDate.toISOString().split("T")[0]}
+                      </Text>
+                    </Box>
+                  </HStack>
+                </Button>
+              )}
               {show && (
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -205,6 +211,7 @@ export const AddProduct: React.FC = () => {
                   mode={"date"}
                   is24Hour={true}
                   display="default"
+                  style={Platform.OS === "ios" ? { width: "100%" } : null}
                   onChange={onChangeDatePicker}
                 />
               )}

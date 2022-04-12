@@ -18,7 +18,11 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const Home: React.FC = () => {
+interface Props {
+  navigation: any;
+}
+
+export const Home: React.FC<Props> = ({ navigation }) => {
   const [products, setProducts] = React.useState<TProduct[]>([]);
   const [notificationToken, setNotificationToken] = React.useState<string>("");
   const [isUpdateProducts, setIsUpdateProducts] =

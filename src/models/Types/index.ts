@@ -6,4 +6,5 @@ export type TProduct = {
   color: string;
   barCode: string;
   id: string;
+  notificationId: string;
 };

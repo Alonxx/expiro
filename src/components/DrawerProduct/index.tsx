@@ -1,19 +1,11 @@
 import { TProduct } from "models/Types";
-import {
-  Actionsheet,
-  Box,
-  Heading,
-  Text,
-  Center,
-  VStack,
-  HStack,
-  Button,
-} from "native-base";
+import { Actionsheet, Box, Text, VStack, Button } from "native-base";
 import React from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetProducts } from "../../hooks";
 import { Alert } from "react-native";
+import * as Notifications from "expo-notifications";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -53,6 +45,9 @@ export const DrawerProduct: React.FC<Props> = ({
             await AsyncStorage.setItem(
               "products",
               JSON.stringify(producsFilter)
+            );
+            await Notifications.cancelScheduledNotificationAsync(
+              product.notificationId
             );
             setIsUpdateProducts(true);
             setLoading(false);

@@ -8,5 +8,5 @@
   },
     "include": [
       "src"
-    ]
+, "node_modules/declarations.d.ts"    ]
 }

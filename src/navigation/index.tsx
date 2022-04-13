@@ -1,10 +1,8 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home, AddProduct, Settings, Onboarding } from "../screens";
+import { Home, AddProduct, Settings } from "../screens";
 import TabBar from "../components/TabBar";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const TabBarNavigator = createBottomTabNavigator();
 /* const HomeStackNavigator = createNativeStackNavigator();

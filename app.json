@@ -1,14 +1,19 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon96x96.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
     "name": "expiro",
     "slug": "expiro",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "notification": {
-      "icon": "./assets/icon96x96.png",
-      "color": "#ffffff0"
-    },
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",

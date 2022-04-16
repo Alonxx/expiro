@@ -4,6 +4,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { TProduct } from "models/Types";
 import { Box, Heading, Text, Button } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 
 interface Props {
   setShowScanner: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,21 +20,17 @@ export const BarCordeScanner: React.FC<Props> = ({
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+      if (status === "denied") {
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+      }
     })();
   }, []);
 
   const handleBarCodeScanned = ({ type, data }: any) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setInputsValue((prevState: TProduct) => ({ ...prevState, barCode: data }));
     setShowScanner(false);
   };
-
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
 
   return (
     <View style={styles.container}>

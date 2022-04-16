@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetProducts, useGetDaysToExpire } from "../../hooks";
 import { Alert } from "react-native";
+import { AdBanner } from "../../components";
 
 export const Settings: React.FC = () => {
   const getProducts = useGetProducts();
@@ -25,6 +26,7 @@ export const Settings: React.FC = () => {
         },
         {
           text: "Delete",
+          style: "destructive",
           onPress: async () => {
             setLoading({ ...loading, expired: true });
             let producsData = await getProducts();
@@ -63,6 +65,7 @@ export const Settings: React.FC = () => {
         },
         {
           text: "Delete",
+          style: "destructive",
           onPress: async () => {
             setLoading({ ...loading, all: true });
             await AsyncStorage.setItem("products", JSON.stringify([]));
@@ -83,6 +86,7 @@ export const Settings: React.FC = () => {
 
   return (
     <SafeAreaView>
+      <AdBanner />
       <Box mb={3}>
         <Text
           fontWeight={"600"}

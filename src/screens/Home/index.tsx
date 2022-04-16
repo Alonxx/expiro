@@ -1,5 +1,5 @@
 import { Box, Text, Input } from "native-base";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { Products } from "../../components";
 import React from "react";
 import { TProduct } from "models/Types";
@@ -9,6 +9,9 @@ import { useIsFocused } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
+import { AdBanner } from "../../components/AdBanner";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -18,11 +21,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
-interface Props {
-  navigation: any;
-}
+interface Props {}
 
-export const Home: React.FC<Props> = ({ navigation }) => {
+export const Home: React.FC<Props> = () => {
   const [products, setProducts] = React.useState<TProduct[]>([]);
   const [notificationToken, setNotificationToken] = React.useState<string>("");
   const [isUpdateProducts, setIsUpdateProducts] =
@@ -35,6 +36,7 @@ export const Home: React.FC<Props> = ({ navigation }) => {
 
   React.useEffect(() => {
     const getNotificationPermission = async () => {
+      await BarCodeScanner.requestPermissionsAsync();
       const token = await registerForPushNotificationsAsync();
       if (token) return setNotificationToken(token);
       return;
@@ -83,7 +85,6 @@ export const Home: React.FC<Props> = ({ navigation }) => {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
     } else {
       return;
     }
@@ -101,6 +102,8 @@ export const Home: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView>
+      <AdBanner />
+
       <Box>
         <Text
           fontWeight={"600"}

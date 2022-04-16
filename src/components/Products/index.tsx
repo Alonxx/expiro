@@ -1,10 +1,9 @@
 import React from "react";
-import { Box, Button, FlatList, View, Text, Divider } from "native-base";
-import { DrawerProduct, ProductItem } from "../index";
+import { Button, FlatList, View, Divider } from "native-base";
+import { ProductItem } from "../ProductItem";
+import { DrawerProduct } from "../DrawerProduct";
 import { TProduct } from "models/Types";
-import { TouchableHighlight } from "react-native";
-
-import { Actionsheet, useDisclose } from "native-base";
+import { useDisclose } from "native-base";
 
 interface Props {
   productsList: TProduct[];
@@ -24,6 +23,7 @@ export const Products: React.FC<Props> = ({
     color: "blue.500",
     barCode: "",
     id: "",
+    notificationId: "",
   });
 
   return (

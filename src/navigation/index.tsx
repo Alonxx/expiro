@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home, AddProduct, Settings } from "../screens";
 import TabBar from "../components/TabBar";
+import { AdBanner } from "../components/index";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TabBarNavigator = createBottomTabNavigator();
 /* const HomeStackNavigator = createNativeStackNavigator();
@@ -27,6 +29,7 @@ const HomeNavigator = () => {
   );
 };
  */
+
 interface PropsTab {
   onBoarding: boolean;
 }

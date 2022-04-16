@@ -36,6 +36,7 @@ export const DrawerProduct: React.FC<Props> = ({
         },
         {
           text: "Delete",
+          style: "destructive",
           onPress: async () => {
             setLoading(true);
             let producsData = await getProducts();

@@ -1,7 +1,5 @@
 import OnboardingCarousel from "react-native-onboarding-swiper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image } from "react-native";
-import Market from "../../assets/images/market.svg";
 import { Text, Box } from "native-base";
 
 interface Props {
@@ -27,6 +25,7 @@ export const Onboarding: React.FC<Props> = ({ setNeedOnboarding }) => {
                 </Text>
               </Box>
             ),
+
             title: "Don't let your food expire",
             subtitle:
               "Follow the control of the expiration date of your products",

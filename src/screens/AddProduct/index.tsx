@@ -16,13 +16,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TProduct } from "models/Types";
-import { BarCordeScanner } from "../../components";
+import { AdBanner, BarCordeScanner } from "../../components";
 import { useToast } from "native-base";
 import "react-native-get-random-values";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Platform } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import * as Notifications from "expo-notifications";
+import {
+  AdMobBanner,
+  AdMobInterstitial,
+  PublisherBanner,
+  AdMobRewarded,
+  setTestDeviceIDAsync,
+} from "expo-ads-admob";
 
 export const AddProduct: React.FC = () => {
   const alert = useToast();
@@ -75,9 +82,7 @@ export const AddProduct: React.FC = () => {
       };
       productsArray.push(newProduct);
       await AsyncStorage.setItem("products", JSON.stringify(productsArray));
-
       setInputsValue({ ...defaultInputsValue });
-      setLoading(false);
       alert.show({
         pl: 2,
         pr: 2,
@@ -87,6 +92,24 @@ export const AddProduct: React.FC = () => {
         borderRadius: 13,
       });
       setLoading(false);
+      try {
+        const ShowAdsCounter = await AsyncStorage.getItem("ShowAdsCounter");
+        if (ShowAdsCounter && Number(ShowAdsCounter) >= 1) {
+          await AdMobInterstitial.setAdUnitID(
+            "ca-app-pub-3940256099942544/1033173712"
+          );
+          await AdMobInterstitial.requestAdAsync({
+            servePersonalizedAds: true,
+          });
+          await AdMobInterstitial.showAdAsync();
+          await AsyncStorage.setItem("ShowAdsCounter", "0");
+        } else {
+          await AsyncStorage.setItem(
+            "ShowAdsCounter",
+            (Number(ShowAdsCounter) + 1).toString()
+          );
+        }
+      } catch (error) {}
     } catch (error) {
       console.log(error);
     }
@@ -106,7 +129,11 @@ export const AddProduct: React.FC = () => {
   };
 
   const scheduleNotification = async (product: TProduct) => {
-    const trigger = new Date(product.expirationDate).setHours(12, 0, 0, 0);
+    //const trigger = new Date(product.expirationDate).setHours(12, 0, 0, 0);
+
+    const trigger = new Date(product.expirationDate).setMinutes(
+      product.expirationDate.getMinutes() + 1
+    );
 
     try {
       const notificationId = await Notifications.scheduleNotificationAsync({
@@ -134,6 +161,7 @@ export const AddProduct: React.FC = () => {
   return (
     <SafeAreaView>
       <ScrollView minW={"100%"} minHeight={"100%"}>
+        <AdBanner />
         <Box>
           <Text
             fontWeight={"600"}
@@ -154,6 +182,7 @@ export const AddProduct: React.FC = () => {
                 onChangeText={(text) =>
                   setInputsValue({ ...inputsValue, barCode: text })
                 }
+                keyboardType="numeric"
                 value={inputsValue.barCode}
                 bgColor={"gray.200"}
                 variant={"unstyled"}
@@ -216,11 +245,7 @@ export const AddProduct: React.FC = () => {
                       </Box>
                       <Box w={"75%"}>
                         <Text>
-                          {
-                            inputsValue.expirationDate
-                              .toISOString()
-                              .split("T")[0]
-                          }
+                          {inputsValue.expirationDate.toLocaleDateString()}
                         </Text>
                       </Box>
                     </HStack>
@@ -300,8 +325,12 @@ export const AddProduct: React.FC = () => {
               <FormControl.Label>Units</FormControl.Label>
               <Input
                 value={inputsValue.units}
+                keyboardType="numeric"
                 onChangeText={(text) =>
-                  setInputsValue({ ...inputsValue, units: text })
+                  setInputsValue({
+                    ...inputsValue,
+                    units: text.replace(/[^0-9]/g, ""),
+                  })
                 }
                 height={9}
                 type="number"
